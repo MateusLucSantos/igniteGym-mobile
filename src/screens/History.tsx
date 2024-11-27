@@ -16,6 +16,7 @@ import { ScreenHeader } from "@components/ScreenHeader";
 import { HistoryGroupByDayDTO } from "@dtos/HistoryGroupByDayDTO";
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
+import { Loading } from "@components/Loading";
 
 export function History() {
   const [isLoading, setIsLoading] = useState(true);
@@ -54,35 +55,39 @@ export function History() {
   return (
     <VStack flex={1}>
       <ScreenHeader title="Histórico" />
-      <SectionList
-        sections={exercises}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <HistoryCard data={item} />}
-        renderSectionHeader={({ section }) => (
-          <Heading
-            color="$gray200"
-            fontSize="$md"
-            mt="$10"
-            mb="$3"
-            fontFamily="$heading"
-          >
-            {section.title}
-          </Heading>
-        )}
-        style={{ paddingHorizontal: 32 }}
-        contentContainerStyle={
-          exercises.length === 0 && {
-            flex: 1,
-            justifyContent: "center",
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SectionList
+          sections={exercises}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <HistoryCard data={item} />}
+          renderSectionHeader={({ section }) => (
+            <Heading
+              color="$gray200"
+              fontSize="$md"
+              mt="$10"
+              mb="$3"
+              fontFamily="$heading"
+            >
+              {section.title}
+            </Heading>
+          )}
+          style={{ paddingHorizontal: 32 }}
+          contentContainerStyle={
+            exercises.length === 0 && {
+              flex: 1,
+              justifyContent: "center",
+            }
           }
-        }
-        ListEmptyComponent={() => (
-          <Text color="$gray100" textAlign="center">
-            Não há exercícios registrados ainda.{`\n`} Vamos fazer exercícios
-            hoje?
-          </Text>
-        )}
-      />
+          ListEmptyComponent={() => (
+            <Text color="$gray100" textAlign="center">
+              Não há exercícios registrados ainda.{`\n`} Vamos fazer exercícios
+              hoje?
+            </Text>
+          )}
+        />
+      )}
     </VStack>
   );
 }

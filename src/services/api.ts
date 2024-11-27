@@ -41,15 +41,18 @@ api.registerInterceptTokenManager = (signOut) => {
             return Promise.reject(requestError);
           }
 
+          // console.log(refresh_token)
+
           const originalRequestConfig = requestError.config;
           // console.log("REQUISIÇÃO => ", originalRequestConfig);
+          // console.log(isRefreshing)
 
           if (isRefreshing) {
             return new Promise((resolve, reject) => {
               failedQueue.push({
                 onSuccess: (token: string) => {
                   originalRequestConfig.headers = {
-                    Authorization: `Bearer ${token}`,
+                    "Authorization": `Bearer ${token}`,
                   };
                   resolve(api(originalRequestConfig));
                 },
@@ -62,13 +65,14 @@ api.registerInterceptTokenManager = (signOut) => {
           // console.log(failedQueue)
 
           isRefreshing = true;
+          // console.log(isRefreshing)
 
           return new Promise(async (resolve, reject) => {
             try {
               const { data } = await api.post("/sessions/refresh_token", {
                 refresh_token,
               });
-              console.log("TOKEN ATUALIZADO => ",data)
+              // console.log("TOKEN ATUALIZADO => ",data)
 
               await storageAuthTokenSave({
                 token: data.token,
@@ -82,7 +86,7 @@ api.registerInterceptTokenManager = (signOut) => {
               }
 
               originalRequestConfig.headers = {
-                Authorization: `Bearer ${data.token}`,
+                "Authorization": `Bearer ${data.token}`,
               };
 
               api.defaults.headers.common[
