@@ -21,11 +21,11 @@ export function Input({
 }: Props) {
   const invalid = !!errorMessage || isInvalid;
   return (
-    <FormControl isInvalid={invalid} w="$full" mb="$2">
+    <FormControl isInvalid={invalid} w="$full" mb="$1">
       <InputGlueStack
         isInvalid={isInvalid}
         h="$14"
-        mb="$2"
+        // mb="$2"
         borderWidth="$0"
         borderRadius="$md"
         $focus={{
